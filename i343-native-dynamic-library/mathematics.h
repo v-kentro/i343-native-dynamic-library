@@ -15,8 +15,7 @@ namespace i343
 		 * \details This is simply to provide sample functionality in order to demonstrate using
 		 * native NuGet packages.
 		 */
-		__declspec(dllexport)
-		class mathematics
+		class __declspec(dllexport) mathematics
 		{
 		public:
 			/**
