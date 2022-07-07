@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd https://raw.githubusercontent.com/NuGet/NuGet.Client/dev/src/NuGet.Core/NuGet.Packaging/compiler/resources/nuspec.xsd">
+    <metadata minClientVersion="5.10">
+        <id>i343-native-dynamic-library</id>
+        <version>1.0.0</version>
+        <description>An example of and explanation for how to create a NuGet package containing a dynamic library that can be linked into a C++ project.</description>
+        <authors>v-kentro,343iteamet</authors>
+        <!-- optional tags -->
+        <projectUrl>https://github.com/v-kentro/i343-native-dynamic-library</projectUrl>
+        <!--
+        <license type="expression">AGPLv3</license>
+        <icon></icon>
+        <readme>README.md</readme>
+        -->
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <developmentDependency>false</developmentDependency>
+        <copyright>343i</copyright>
+        <language>en-US</language>
+        <tags>native sample</tags>
+        <repository type="git" url="https://github.com/v-kentro/i343-native-dynamic-library" />
+        <title>Sample Native Dynamic Library</title>
+        <dependencies>
+            <group targetFramework="native" />
+        </dependencies>
+    </metadata>
+    <files>
+        <!--
+        The README file that will be displayed for the NuGet package.
+        -->
+        <file src="../README.md" target="/" />
+        <!--
+        Items in the build/ folder are added to the build process of the consuming project.
+        This is further sub-divided by target framework, so a package may have different build logic
+        for different frameworks (such as net6.0 or netstandard2.1).
+        The target framework for C++ projects is "native".  Others use Target Framework Monikers (TFMs).
+        Build components can be *.targets or *.props files, or both.  The file name must match the
+        NuGet package ID.
+        -->
+        <file src="i343-native-dynamic-library.targets" target="build/native/" />
+        <!--
+        Items in the lib/ folder are intended to be libraries.
+        This is further sub-divided by target framework.
+        There is no special logic for "native" libraries, the logic to reference these libraries
+        must reside in the included *.targets file in the build directory.
+        This must include components for any and all build configurations of the consuming project.
+        -->
+        <file src="../x64/Debug/i343-native-dynamic-library.dll" target="lib/native/x64/Debug/" />
+        <file src="../x64/Debug/i343-native-dynamic-library.lib" target="lib/native/x64/Debug/" />
+        <file src="../x64/Debug/i343-native-dynamic-library.xml" target="lib/native/x64/Debug/" />
+        <file src="../x64/Debug/i343-native-dynamic-library.pdb" target="lib/native/x64/Debug/" />
+        <file src="../x64/Release/i343-native-dynamic-library.dll" target="lib/native/x64/Release/" />
+        <file src="../x64/Release/i343-native-dynamic-library.lib" target="lib/native/x64/Release/" />
+        <file src="../x64/Release/i343-native-dynamic-library.xml" target="lib/native/x64/Release/" />
+        <file src="../x64/Release/i343-native-dynamic-library.pdb" target="lib/native/x64/Release/" />
+        <file src="../Debug/i343-native-dynamic-library.dll" target="lib/native/Win32/Debug/" />
+        <file src="../Debug/i343-native-dynamic-library.lib" target="lib/native/Win32/Debug/" />
+        <file src="../Debug/i343-native-dynamic-library.xml" target="lib/native/Win32/Debug/" />
+        <file src="../Debug/i343-native-dynamic-library.pdb" target="lib/native/Win32/Debug/" />
+        <file src="../Release/i343-native-dynamic-library.dll" target="lib/native/Win32/Release/" />
+        <file src="../Release/i343-native-dynamic-library.lib" target="lib/native/Win32/Release/" />
+        <file src="../Release/i343-native-dynamic-library.xml" target="lib/native/Win32/Release/" />
+        <file src="../Release/i343-native-dynamic-library.pdb" target="lib/native/Win32/Release/" />
+        <!--
+        There is nothing special about the include/ folder.  It was simply chosen as a convenient location
+        for include files intended for use by consuming projects.
+        
+        The header file is in the root directory in this project, but when packaged for distribution
+        it is exposed as i343/dynamic_math/mathematics.h.
+        -->
+        <file src="mathematics.h" target="include/i343/dynamic_math/" />
+        <!--
+        Any components added to the content/ folder will be copied into the consuming project.
+        This is an interesting feature, but it means the copied files will be in a location where
+        they may be accidentally (and mistakenly) added to source control.
+        This is why the include files are not placed in the content folder.
+        -->
+    </files>
+</package>

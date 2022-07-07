@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <ItemDefinitionGroup>
+        <ClCompile>
+            <!--
+            The include file inside the NuGet package is added to the include search path.
+            This way the include file is not added directly to the project and will not be
+            subject to source control.
+            
+            The MSBuildThisFileDirectory property is the location of this *.targets file in
+            the installed NuGet package.  The property always ends with a directory separator.
+            Since this *.targets file is in the build\native subdirectory, the root of the
+            NuGet package is two directories up.
+            -->
+            <AdditionalIncludeDirectories>$(MSBuildThisFileDirectory)..\..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+        </ClCompile>
+        <Link>
+            <!--
+            The location of the library in the NuGet package is added to the library search path.
+            This package includes different builds for Debug/Release and for x86/x64.  (x86 = Win32)
+            
+            There is no "magic" regarding the files in the lib\native subdirectory.
+            -->
+            <AdditionalLibraryDirectories>$(MSBuildThisFileDirectory)..\..\lib\native\$(PlatformName)\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+            <!--
+            Libraries to link should be specified as their bare names.
+            Locating those libraries is achieved by appending to the library search path (as above).
+            -->
+            <AdditionalDependencies>i343-native-dynamic-library.lib;%(AdditionalDependencies)</AdditionalDependencies>
+        </Link>
+    </ItemDefinitionGroup>
+</Project>

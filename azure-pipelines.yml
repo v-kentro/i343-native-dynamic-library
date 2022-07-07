@@ -1,0 +1,156 @@
+# https://aka.ms/yaml
+
+trigger:
+  - main
+
+parameters: []
+
+pool:
+  vmImage: 'windows-2022'
+  demands:
+    - msbuild
+    - visualstudio
+    - vstest
+
+variables:
+  solution: '**/*.sln'
+
+
+stages:
+  - stage: Build
+    displayName: Build
+    dependsOn: []
+    jobs:
+      - job: Setup
+        dependsOn: []
+        workspace:
+          clean: all
+        steps:
+          - task: NuGetToolInstaller@1
+
+          - task: NuGetAuthenticate@1
+
+          - task: NuGetCommand@2
+            inputs:
+              command: restore
+              restoreSolution: $(solution)
+              includeNuGetOrg: true
+              feedsToUse: select
+              vstsFeed: iteam-release
+
+          #- task: PublishPipelineArtifact@1
+          #  inputs:
+          #    targetPath: $(System.DefaultWorkingDirectory)/packages
+          #    artifactName: packages
+
+      - job: BuildJob
+        dependsOn:
+          - Setup
+        strategy:
+          matrix:
+            Debug32:
+              BuildConfiguration: Debug
+              BuildPlatform: x86
+              Path: Debug
+              Name: Debug32
+            Debug64:
+              BuildConfiguration: Debug
+              BuildPlatform: x64
+              Path: x64
+              Name: Debug64
+            Release32:
+              BuildConfiguration: Release
+              BuildPlatform: x86
+              Path: Release
+              Name: Release32
+            Release64:
+              BuildConfiguration: Release
+              BuildPlatform: x64
+              Path: x64
+              Name: Release64
+            
+        steps:
+          #- task: DownloadPipelineArtifact@2
+          #  inputs:
+          #    artifact: packages
+          #    path: $(System.DefaultWorkingDirectory)
+
+          - task: MSBuild@1
+            enabled: false
+            inputs:
+              solution: $(solution)
+              platform: $(BuildPlatform)
+              configuration: $(BuildConfiguration)
+              clean: true
+              maximumCpuCount: false
+              msbuildArchitecture: x64
+              msbuildLocationMethod: version
+              msbuildVersion: latest
+              msbuildArguments: ''
+
+          - task: VSBuild@1
+            inputs:
+              solution: $(solution)
+              platform: $(BuildPlatform)
+              configuration: $(BuildConfiguration)
+              clean: true
+              maximumCpuCount: false
+              msbuildArchitecture: x64
+              vsVersion: latest
+              msbuildArgs: ''
+
+          - task: PublishPipelineArtifact@1
+            inputs:
+              targetPath: $(Path)
+              artifactName: $(Name)
+
+          - task: VSTest@2
+            inputs:
+              testRunTitle: $(Name)
+              platform: $(BuildPlatform)
+              configuration: $(BuildConfiguration)
+              testSelector: testAssemblies
+              testAssemblyVer2: |
+                **\\*test*.dll
+                !**\\*TestAdapter.dll
+                !**\\obj\\**
+              #testConfiguration: $(BuildConfiguration)
+              codeCoverageEnabled: true
+
+      - job: Publish
+        dependsOn:
+          - BuildJob
+        steps:
+          - task: NuGetToolInstaller@1
+
+          - task: DownloadPipelineArtifact@2
+            inputs:
+              artifact: Debug32
+              path: $(System.DefaultWorkingDirectory)\Debug
+
+          - task: DownloadPipelineArtifact@2
+            inputs:
+              artifact: Debug64
+              path: $(System.DefaultWorkingDirectory)\x64
+
+          - task: DownloadPipelineArtifact@2
+            inputs:
+              artifact: Release32
+              path: $(System.DefaultWorkingDirectory)\Release
+
+          - task: DownloadPipelineArtifact@2
+            inputs:
+              artifact: Release64
+              path: $(System.DefaultWorkingDirectory)\x64
+
+          - task: NuGetCommand@2
+            inputs:
+              command: pack
+              packagesToPack: '**/*.nuspec'
+              basePath: $(System.DefaultWorkingDirectory)\i343-native-dynamic-library
+              packDestination: $(Build.ArtifactStagingDirectory)
+
+          - task: PublishPipelineArtifact@1
+            inputs:
+              targetPath: $(Build.ArtifactStagingDirectory)
+              artifactName: package
