@@ -29,4 +29,9 @@
             <AdditionalDependencies>i343-native-dynamic-library.lib;%(AdditionalDependencies)</AdditionalDependencies>
         </Link>
     </ItemDefinitionGroup>
+    <Target Name="CopyDll" AfterTargets="Build">
+        <Copy
+            SourceFiles="$(MSBuildThisFileDirectory)..\..\lib\native\$(PlatformName)\$(Configuration)\i343-native-dynamic-library.dll"
+            DestinationFolder="$(OutDir)" SkipUnchangedFiles="true"/>
+    </Target>
 </Project>
