@@ -65,19 +65,19 @@ jobs:
       - build
     steps:
       - name: Download Something
-        uses: actions/download-artifacts@v3
+        uses: actions/download-artifact@v3
         with:
           name: Debug-x86
       - name: Download Something
-        uses: actions/download-artifacts@v3
+        uses: actions/download-artifact@v3
         with:
           name: Release-x86
       - name: Download Something
-        uses: actions/download-artifacts@v3
+        uses: actions/download-artifact@v3
         with:
           name: Debug-x64
       - name: Download Something
-        uses: actions/download-artifacts@v3
+        uses: actions/download-artifact@v3
         with:
           name: Debug-x64
       - name: Create NuGet Package
