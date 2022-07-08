@@ -56,6 +56,7 @@ jobs:
         uses: microsoft/vstest-action@v1.0.0
         with:
           searchFolder: i343-native-dynamic-library-tests
+          testAssembly: i343-native-dynamic-library-tests.dll
           codeCoverageEnabled: true
   publish:
     name: Publish
@@ -67,19 +68,17 @@ jobs:
         uses: actions/download-artifacts@v3
         with:
           name: Debug-x86
-          path: Debug
       - name: Download Something
         uses: actions/download-artifacts@v3
         with:
           name: Release-x86
-          path: Release
       - name: Download Something
         uses: actions/download-artifacts@v3
         with:
           name: Debug-x64
-          path: x64
       - name: Download Something
         uses: actions/download-artifacts@v3
         with:
           name: Debug-x64
-          path: x64
+      - name: Create NuGet Package
+        run: nuget pack **/*.nuspec -BasePath i343-native-dynamic-library
