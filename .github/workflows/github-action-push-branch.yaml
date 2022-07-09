@@ -84,5 +84,7 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: Debug-x64
+      - name: Debug Info
+        run: ls -r
       - name: Create NuGet Package
         run: nuget pack **/*.nuspec
