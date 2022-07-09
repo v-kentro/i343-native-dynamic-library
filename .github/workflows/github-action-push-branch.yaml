@@ -85,4 +85,4 @@ jobs:
         with:
           name: Debug-x64
       - name: Create NuGet Package
-        run: nuget pack i343-native-dynamic-library.nuspec -BasePath i343-native-dynamic-library
+        run: nuget pack **/*.nuspec
