@@ -64,6 +64,10 @@ jobs:
     needs:
       - build
     steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
       - name: Download Something
         uses: actions/download-artifact@v3
         with:
