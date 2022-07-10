@@ -48,8 +48,8 @@ jobs:
         with:
           name: ${{ matrix.configuration }}-${{ matrix.platform }}
           path: |
-            x86/
-            x64/
+            x64/Debug/
+            x64/Release/
             Debug/
             Release/
       #- name: Run Tests
@@ -86,6 +86,8 @@ jobs:
           name: Debug-x64
       - name: Debug Info
         run: pwd
+      - name: Debug Info
+        run: ls
       - name: Debug Info
         run: ls -r Debug
       - name: Debug Info
