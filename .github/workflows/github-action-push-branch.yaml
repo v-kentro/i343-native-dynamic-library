@@ -68,22 +68,22 @@ jobs:
         uses: actions/checkout@v2
         with:
           fetch-depth: 0
-      - name: Download Something
+      - name: Download Debug x86
         uses: actions/download-artifact@v3
         with:
           name: Debug-x86
-      - name: Download Something
+      - name: Download Release x86
         uses: actions/download-artifact@v3
         with:
           name: Release-x86
-      - name: Download Something
+      - name: Download Debug x64
         uses: actions/download-artifact@v3
         with:
           name: Debug-x64
-      - name: Download Something
+      - name: Download Release x64
         uses: actions/download-artifact@v3
         with:
-          name: Debug-x64
+          name: Release-x64
       - name: Debug Info
         run: ls
       - name: Debug Info
