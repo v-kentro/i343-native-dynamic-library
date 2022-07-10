@@ -87,6 +87,6 @@ jobs:
       - name: Debug Info
         run: pwd
       - name: Debug Info
-        run: ls
+        run: ls . Debug Release x64
       - name: Create NuGet Package
         run: nuget pack i343-native-dynamic-library/i343-native-dynamic-library.nuspec -BasePath i343-native-dynamic-library
