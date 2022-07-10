@@ -85,8 +85,6 @@ jobs:
         with:
           name: Debug-x64
       - name: Debug Info
-        run: pwd
-      - name: Debug Info
         run: ls
       - name: Debug Info
         run: ls -r Debug
