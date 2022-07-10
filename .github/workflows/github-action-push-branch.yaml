@@ -48,8 +48,7 @@ jobs:
         with:
           name: ${{ matrix.configuration }}-${{ matrix.platform }}
           path: |
-            x64/Debug/
-            x64/Release/
+            x64/
             Debug/
             Release/
       #- name: Run Tests
@@ -84,17 +83,10 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: Release-x64
-      - name: Debug Info
-        run: ls
-      - name: Debug Info
-        run: ls -r Debug
-      - name: Debug Info
-        run: ls -r Release
-      - name: Debug Info
-        run: ls -r x64
-      - name: Debug Info
-        run: ls -r x64/Debug
-      - name: Debug Info
-        run: ls -r x64/Release
       - name: Create NuGet Package
         run: nuget pack i343-native-dynamic-library/i343-native-dynamic-library.nuspec -BasePath i343-native-dynamic-library
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: NuGet
+          path: i343-native-dynamic-library.1.0.0.nupkg
