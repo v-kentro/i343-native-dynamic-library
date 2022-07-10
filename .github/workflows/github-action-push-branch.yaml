@@ -84,5 +84,9 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: Debug-x64
+      - name: Debug Info
+        run: pwd
+      - name: Debug Info
+        run: ls
       - name: Create NuGet Package
         run: nuget pack i343-native-dynamic-library/i343-native-dynamic-library.nuspec -BasePath i343-native-dynamic-library
