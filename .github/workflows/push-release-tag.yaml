@@ -23,8 +23,6 @@ jobs:
   build:
     name: Build
     runs-on: windows-2022
-    needs:
-      - setup
     strategy:
       matrix:
         platform:
