@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd https://raw.githubusercontent.com/NuGet/NuGet.Client/dev/src/NuGet.Core/NuGet.Packaging/compiler/resources/nuspec.xsd">
     <metadata minClientVersion="5.10">
         <id>i343-native-dynamic-library</id>
-        <version>0.1.1</version>
+        <version>1.0.0</version>
         <description>An example of and explanation for how to create a NuGet package containing a dynamic library that can be linked into a C++ project.</description>
         <authors>v-kentro,343iteamet</authors>
         <!-- optional tags -->
