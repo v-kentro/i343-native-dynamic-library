@@ -19,6 +19,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{8667F7F5-6DAF-4A15-A637-A571EEF51478}"
 	ProjectSection(SolutionItems) = preProject
 		.github\workflows\github-action-push-branch.yaml = .github\workflows\github-action-push-branch.yaml
+		.github\workflows\github-action-push-tag.yaml = .github\workflows\github-action-push-tag.yaml
 	EndProjectSection
 EndProject
 Global
