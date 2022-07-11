@@ -9,11 +9,11 @@
         <authors>v-kentro,343iteamet</authors>
         <!-- optional tags -->
         <projectUrl>https://github.com/v-kentro/i343-native-dynamic-library</projectUrl>
-        <!--
         <license type="expression">AGPLv3</license>
+        <!--
         <icon></icon>
-        <readme>README.md</readme>
         -->
+        <readme>README.md</readme>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
         <developmentDependency>false</developmentDependency>
         <copyright>343i</copyright>
