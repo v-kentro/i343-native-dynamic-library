@@ -1,0 +1,98 @@
+name: Build and Test
+
+on:
+  workflow_call:
+    inputs:
+      project_name:
+        description: The name of the project.  This should match the NuGet package ID.
+        type: string
+        required: true
+
+env: {}
+
+jobs:
+  build:
+    name: Build
+    runs-on: windows-2022
+    strategy:
+      matrix:
+        platform:
+          - x86
+          - x64
+        configuration:
+          - Debug
+          - Release
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Setup MSBuild
+        uses: microsoft/setup-msbuild@v1.1
+        with:
+          msbuild-architecture: x64
+      - name: Build
+        run: msbuild ${{ inputs.project_name }}.sln -p:Configuration=${{ matrix.configuration }} -p:Platform=${{ matrix.platform }}
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ matrix.configuration }}-${{ matrix.platform }}
+          path: |
+            x64/
+            Debug/
+            Release/
+  test:
+    name: Test
+    runs-on: windows-2022
+    needs:
+      - build
+    strategy:
+      matrix:
+        platform:
+          - x86
+          - x64
+        configuration:
+          - Debug
+          - Release
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Download Artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: ${{ matrix.configuration }}-${{ matrix.platform }}
+      - name: Run Tests
+        uses: microsoft/vstest-action@v1.0.0
+        with:
+          searchFolder: '.\\'
+          testAssembly: '**\\*test*.dll'
+          codeCoverageEnabled: false
+  package:
+    name: Package
+    runs-on: windows-2022
+    needs:
+      - build
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Download Debug x86
+        uses: actions/download-artifact@v3
+        with:
+          name: Debug-x86
+      - name: Download Release x86
+        uses: actions/download-artifact@v3
+        with:
+          name: Release-x86
+      - name: Download Debug x64
+        uses: actions/download-artifact@v3
+        with:
+          name: Debug-x64
+      - name: Download Release x64
+        uses: actions/download-artifact@v3
+        with:
+          name: Release-x64
+      - name: Create NuGet Package
+        run: nuget pack ${{ inputs.project_name }}/${{ inputs.project_name }}.nuspec -BasePath ${{ inputs.project_name }}
+      - name: Upload NuGet Package
+        uses: actions/upload-artifact@v3
+        with:
+          name: NuGet
+          path: '*.nupkg'

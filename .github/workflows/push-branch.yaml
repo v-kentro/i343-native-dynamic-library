@@ -8,84 +8,9 @@ on:
 env: {}
 
 jobs:
-  setup:
-    name: Setup
-    runs-on: windows-2022
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-      - name: Setup MSBuild
-        uses: microsoft/setup-msbuild@v1.1
-        with:
-          msbuild-architecture: x64
-  build:
-    name: Build
-    runs-on: windows-2022
-    strategy:
-      matrix:
-        platform:
-          - x86
-          - x64
-        configuration:
-          - Debug
-          - Release
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-      - name: Setup MSBuild
-        uses: microsoft/setup-msbuild@v1.1
-        with:
-          msbuild-architecture: x64
-      - name: Build
-        run: msbuild i343-native-dynamic-library.sln -p:Configuration=${{ matrix.configuration }} -p:Platform=${{ matrix.platform }}
-      - name: Upload Artifacts
-        uses: actions/upload-artifact@v3
-        with:
-          name: ${{ matrix.configuration }}-${{ matrix.platform }}
-          path: |
-            x64/
-            Debug/
-            Release/
-      #- name: Run Tests
-      #  uses: microsoft/vstest-action@v1.0.0
-      #  with:
-      #    searchFolder: i343-native-dynamic-library-tests
-      #    testAssembly: i343-native-dynamic-library-tests.dll
-      #    codeCoverageEnabled: true
-  publish:
-    name: Publish
-    runs-on: windows-2022
-    needs:
-      - build
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-      - name: Download Debug x86
-        uses: actions/download-artifact@v3
-        with:
-          name: Debug-x86
-      - name: Download Release x86
-        uses: actions/download-artifact@v3
-        with:
-          name: Release-x86
-      - name: Download Debug x64
-        uses: actions/download-artifact@v3
-        with:
-          name: Debug-x64
-      - name: Download Release x64
-        uses: actions/download-artifact@v3
-        with:
-          name: Release-x64
-      - name: Create NuGet Package
-        run: nuget pack i343-native-dynamic-library/i343-native-dynamic-library.nuspec -BasePath i343-native-dynamic-library
-      - name: Upload Artifacts
-        uses: actions/upload-artifact@v3
-        with:
-          name: NuGet
-          path: '*.nupkg'
+  call-build:
+    name: Standard Build
+    uses: ./.github/workflows/build.yaml
+    with:
+      project_name: i343-native-dynamic-library
+    secrets: inherit
