@@ -86,7 +86,7 @@ jobs:
           name: Release-x64
       - name: Create NuGet Package
         run: nuget pack i343-native-dynamic-library/i343-native-dynamic-library.nuspec -BasePath i343-native-dynamic-library
-      - name: Upload NuGet Package
+      - name: Configure GitHub Packages
         run: nuget sources add -Name GitHub -UserName v-kentro -Password ${{ secrets.GITHUB_TOKEN }} -Source https://nuget.pkg.github.com/v-kentro/index.json -NonInteractive
       - name: Upload NuGet Package
         run: nuget push *.nupkg -ApiKey ${{ secrets.GITHUB_TOKEN }} -Source GitHub -NonInteractive
